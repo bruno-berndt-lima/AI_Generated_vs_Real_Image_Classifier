@@ -1,0 +1,10 @@
+dataset
+dataset2
+torch_env
+model 
+
+# Ignore the Deepfake Detection folder itself
+/Deepfake Detection/
+
+# But allow its contents
+!/Deepfake Detection/**

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AI vs Real Image Detector</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background: linear-gradient(to right, #141E30, #243B55);
+                color: white;
+                text-align: center;
+                margin: 0;
+                padding: 0;
+            }
+
+            h1 {
+                margin-top: 30px;
+                font-size: 28px;
+            }
+
+            .container {
+                width: 90%;
+                max-width: 500px;
+                margin: 30px auto;
+                background: #1e3c72;
+                padding: 25px;
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            .input-container {
+                margin: 20px 0;
+            }
+
+            .preview-container {
+                margin: 20px 0;
+            }
+
+            button {
+                background: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 10px 0;
+            }
+
+            button:hover {
+                background: #45a049;
+            }
+
+            .result {
+                margin-top: 20px;
+                padding: 15px;
+                border-radius: 5px;
+            }
+
+            .success {
+                background: rgba(76, 175, 80, 0.2);
+            }
+
+            .error {
+                background: rgba(244, 67, 54, 0.2);
+            }
+
+            #imageSpinner {
+                display: none;
+                margin: 20px 0;
+            }
+
+            #imagePreview {
+                max-width: 100%;
+                max-height: 300px;
+                display: none;
+                margin: 10px auto;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>AI vs Real Image Detector</h1>
+
+        <div class="container">
+            <h2>Upload an Image</h2>
+
+            <div class="input-container">
+                <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)" style="width: 35%;">
+            </div>
+
+            <div class="preview-container">
+                <img id="imagePreview" alt="Image Preview">
+            </div>
+
+            <button onclick="submitImage()">Detect AI or Real</button>
+
+            <div id="imageSpinner">
+                <img src="{{ url_for('static', filename='spinner1.gif') }}" alt="Loading..." style="width: 150px; height: 150px;">
+            </div>
+
+            <div id="detectionResult" class="result"></div>
+        </div>
+
+        <script>
+            function previewImage(event) {
+                const imageInput = document.getElementById('imageInput');
+                const imagePreview = document.getElementById('imagePreview');
+                const file = imageInput.files[0];
+
+                if (file) {
+                    if (!file.type.startsWith('image/')) {
+                        alert("Please upload a valid image file!");
+                        imageInput.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            function submitImage() {
+                const imageInput = document.getElementById('imageInput');
+                const imageSpinner = document.getElementById('imageSpinner');
+                const detectionResult = document.getElementById('detectionResult');
+
+                const file = imageInput.files[0];
+                if (!file) {
+                    alert("Please upload an image file!");
+                    return;
+                }
+
+                if (!file.type.startsWith('image/')) {
+                    alert("Please upload a valid image file!");
+                    return;
+                }
+
+                imageSpinner.style.display = 'block';
+                detectionResult.style.display = 'none';
+
+                const formData = new FormData();
+                formData.append('image', file);
+
+                fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    imageSpinner.style.display = 'none';
+
+                    if (data.prediction) {
+                        detectionResult.innerHTML = `Prediction: <strong>${data.prediction}</strong><br> Confidence: <strong>${(data.confidence * 100).toFixed(2)}%</strong>`;
+                        detectionResult.className = "result success";
+                    } else {
+                        detectionResult.innerHTML = "Error: " + data.error;
+                        detectionResult.className = "result error";
+                    }
+
+                    detectionResult.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    detectionResult.innerHTML = 'An error occurred while processing the image!';
+                    detectionResult.className = "result error";
+                    imageSpinner.style.display = 'none';
+                    detectionResult.style.display = 'block';
+                });
+            }
+        </script>
+    </body>
+</html>

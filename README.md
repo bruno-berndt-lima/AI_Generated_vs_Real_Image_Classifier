@@ -1,6 +1,6 @@
 # 🧠 AI-Generated vs Real Image Classifier
 
-This project implements a deep learning model to detect artifical intelligence generated images using PyTorch and the RegNet Y-32GF architecture. The model is trained to classify images as either real or ai-generated.
+This project implements a deep learning model to detect artificial intelligence generated images using PyTorch and the RegNet Y-32GF architecture. The model is trained to classify images as either real or ai-generated.
 
 ## Project Overview
 
@@ -70,7 +70,7 @@ source torch_env/bin/activate  # On Windows: torch_env\Scripts\activate
 
 3. Install dependencies:
 ```bash
-pip install torch torchvision pandas numpy pillow scikit-learn matplotlib tqdm
+pip install torch torchvision pandas numpy pillow scikit-learn matplotlib tqdm seaborn
 ```
 
 ## Usage
@@ -113,5 +113,25 @@ The model's performance is tracked through:
 - Validation Accuracy
 - F1 Score
 
-Results are saved and can be visualized using the provided plotting code.
+## Performance Visualizations
+
+### Training & Validation Loss
+![Training and Validation Loss](static/training&validation_loss.png)
+
+### Training & Validation Accuracy
+![Training and Validation Accuracy](static/training&validation_accuracy.png)
+
+### Confusion Matrix
+![Confusion Matrix](static/confusion_matrix.png)
+
+## Results
+
+The model achieved excellent performance in distinguishing between real and AI-generated images:
+- Final validation accuracy: 95.4%
+- F1 Score: 0.953
+- Low false positive and false negative rates as shown in the confusion matrix
+
+The training and validation curves show that the model learned effectively without significant overfitting, indicating good generalization capabilities to unseen data.
+
+
 

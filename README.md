@@ -47,7 +47,7 @@ The dataset is organized in the following structure:
   - `train_data/`: Contains training images
   - `test_data/`: Contains test images
   - `train.csv`: Contains file_name and label columns
-  - `test.csv`: Contains file_name column
+  - `test.csv`: Contains id column
 
 Images are automatically split into training and validation sets during the data loading process, maintaining class balance between the two categories.
 

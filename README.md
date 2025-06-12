@@ -58,8 +58,8 @@ The model is trained on a dataset of 75,952 training images and 3,998 validation
 
 1. Clone the repository:
 ```bash
-git clone [repository-url]
-cd deepfake-detection
+git clone https://github.com/bruno-berndt-lima/AI_Generated_vs_Real_Image_Classifier.git
+cd AI_Generated_vs_Real_Image_Classifier
 ```
 
 2. Create a virtual environment:
@@ -79,7 +79,10 @@ pip install torch torchvision pandas numpy pillow scikit-learn matplotlib tqdm s
    - Place your images in the appropriate directory
    - Create CSV files with image paths and labels
 
-2. Run the training:
+2. Train the model (adjust the dataset path if needed):
+   - Run the notebook image_classifier.ipynb
+
+3. Run the app (adjust the model path if needed):
 ```python
 python app.py
 ```

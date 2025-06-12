@@ -42,6 +42,15 @@ The project uses a pre-trained RegNet Y-32GF model, fine-tuned on a dataset of r
 
 The model is trained on a dataset of 75,952 training images and 3,998 validation images, split in a 95/5 ratio. The dataset contains both real and ai-generated images.
 
+The dataset is organized in the following structure:
+- `dataset/`
+  - `train_data/`: Contains training images
+  - `test_data/`: Contains test images
+- `train.csv`: Contains file_name and label columns
+- `test.csv`: Contains id column
+
+Images are automatically split into training and validation sets during the data loading process, maintaining class balance between the two categories.
+
 ## Requirements
 
 - Python 3.12.5
